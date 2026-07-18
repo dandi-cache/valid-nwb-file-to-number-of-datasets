@@ -1,12 +1,17 @@
-# DANDI Cache: `<cache-name>`
+# DANDI Cache: `valid-nwb-file-to-number-of-datasets`
 
-`<A short description of what this cache contains and how it is derived.>`
+A one-to-one mapping from content IDs to the number of datasets in their NWB file, restricted to the files that are valid according to [`content-id-to-valid-nwb-file`](https://github.com/dandi-cache/content-id-to-valid-nwb-file).
+
+The upstream cache maps each content ID to whether its NWB file is valid; this cache spans only the `true` entries. For each such content ID, the corresponding asset is streamed directly from the public DANDI Archive S3 bucket — the content ID is itself the S3 object identifier, so its URL is reconstructed without any API lookup — and its datasets are counted:
+
+- HDF5 NWB files (stored as a single blob) are streamed with [`remfile`](https://github.com/flatironinstitute/remfile) and opened with [`h5py`](https://github.com/h5py/h5py); the count is the number of HDF5 datasets.
+- Zarr NWB stores (`.nwb.zarr`) are read anonymously from S3 with [`s3fs`](https://github.com/fsspec/s3fs) and opened with [`zarr`](https://github.com/zarr-developers/zarr-python); the count is the number of Zarr arrays (the Zarr analogue of a dataset).
+
+Because a content ID is content-addressed, each file's dataset count is immutable, so the cache is incremental: every run counts only content IDs it has not recorded yet, catching up over successive daily runs.
 
 Updated frequently.
 
 Primarily for use by developers.
-
-> **Note:** Throughout this template, `<cache-name>` refers to the hyphenated repository name (e.g., `my-cache`) and `<cache_name>` refers to the underscored form used for file and variable names (e.g., `my_cache`).
 
 
 
@@ -22,16 +27,18 @@ import json
 
 import requests
 
-url = "https://raw.githubusercontent.com/dandi-cache/<cache-name>/refs/heads/dist/derivatives/<cache_name>.jsonl.gz"
+url = "https://raw.githubusercontent.com/dandi-cache/valid-nwb-file-to-number-of-datasets/refs/heads/dist/derivatives/valid_nwb_file_to_number_of_datasets.jsonl.gz"
 response = requests.get(url)
 lines = gzip.decompress(data=response.content).decode("utf-8").splitlines()
-<cache_name> = [json.loads(line) for line in lines]
+valid_nwb_file_to_number_of_datasets = [json.loads(line) for line in lines]
 ```
+
+Each line is a single-entry mapping of `{"<content_id>": <number_of_datasets>}`.
 
 ### Save to file
 
 ```bash
-curl https://raw.githubusercontent.com/dandi-cache/<cache-name>/refs/heads/dist/derivatives/<cache_name>.jsonl.gz -o <cache_name>.jsonl.gz
+curl https://raw.githubusercontent.com/dandi-cache/valid-nwb-file-to-number-of-datasets/refs/heads/dist/derivatives/valid_nwb_file_to_number_of_datasets.jsonl.gz -o valid_nwb_file_to_number_of_datasets.jsonl.gz
 ```
 
 
@@ -41,13 +48,13 @@ curl https://raw.githubusercontent.com/dandi-cache/<cache-name>/refs/heads/dist/
 If you plan on using this cache regularly, clone the `derivatives` branch of this repository:
 
 ```bash
-git clone --branch derivatives https://github.com/dandi-cache/<cache-name>.git
+git clone --branch derivatives https://github.com/dandi-cache/valid-nwb-file-to-number-of-datasets.git
 ```
 
 Or, if you prefer [DataLad](https://www.datalad.org/):
 
 ```bash
-datalad clone https://github.com/dandi-cache/<cache-name>.git --branch derivatives
+datalad clone https://github.com/dandi-cache/valid-nwb-file-to-number-of-datasets.git --branch derivatives
 ```
 
 Then set up a CRON on your system to pull the latest version of the cache at your desired frequency.
@@ -55,37 +62,7 @@ Then set up a CRON on your system to pull the latest version of the cache at you
 For example, through `crontab -e`, add:
 
 ```bash
-0 0 * * * git -C /path/to/<cache-name> pull
+0 0 * * * git -C /path/to/valid-nwb-file-to-number-of-datasets pull
 ```
 
 This will minimize data overhead by only loading the most recent changes.
-
-
-
-## How it works
-
-This cache template demonstrates how generated results of the code branch and records every update with full provenance.
-
-It uses three branches:
-
-- **`main`** holds only the code of the update logic, the runtime container definition, and the CI workflows (including building and distributing the container images).
-- [**`derivatives`**](https://github.com/dandi-cache/cache-template/tree/derivatives) is a persistent [DataLad](https://www.datalad.org/) dataset on its own branch. Each update is recorded there with `datalad containers-run`, so every revision carries full provenance of the exact command, the input subdataset commit, the output diff, and the runtime container image digest.
-- **`dist`** is the lightweight publication artifact consumed by downstream users and preferred for one-time downloads.
-
-The processing runs inside a published container image (`ghcr.io/dandi-cache/<cache-name>:latest`) that holds only the pinned runtime environment.
-
-The orchestration lives in [`code/update_pipeline.sh`](code/update_pipeline.sh); the actual cache logic lives in [`code/update.py`](code/update.py).
-
-The repository is described as a [BIDS study dataset](https://bids-specification.readthedocs.io/en/stable/common-principles.html#study-dataset) via [`dataset_description.json`](dataset_description.json) (`DatasetType: "study"`). Future enhancements may improve the provenance tracking through this mechanism in line with BEP028.
-
-
-
-## Repository setup
-
-After generating a repository from this template, the full setup checklist lives in [`.claude/skills/setup-cache/SKILL.md`](.claude/skills/setup-cache/SKILL.md): replacing the placeholders, choosing an input mode, implementing the cache logic, and removing the template scaffolding (this section and the **How it works** section above included).
-
-### With Claude Code
-
-Open a [Claude Code](https://claude.com/claude-code) session in the freshly generated repository and start from a prompt like:
-
-> Set up this new DANDI cache using the setup-cache skill. The cache should `<describe what this cache computes, where its inputs come from, and how often it should update>`. Open the result as a single setup PR.

@@ -1,9 +1,17 @@
 [project]
-name = "<cache-name>"
+name = "valid-nwb-file-to-number-of-datasets"
 version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
     "datalad",
     "datalad-container",
-    # TODO: add this cache's processing dependencies used by code/update.py.
+    # Processing dependencies used by code/update.py. HDF5 NWB files are streamed with
+    # remfile + h5py; Zarr NWB stores are read anonymously from S3 with s3fs + zarr. zarr is
+    # pinned below 3 because DANDI's NWB stores are the Zarr v2 format, which zarr-python 3.x
+    # cannot read (it rejects their consolidated metadata).
+    "h5py",
+    "remfile",
+    "requests",
+    "s3fs",
+    "zarr<3",
 ]
