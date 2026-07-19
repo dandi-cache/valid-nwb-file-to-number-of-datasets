@@ -1,13 +1,14 @@
 # DANDI Cache: `valid-nwb-file-to-number-of-datasets`
 
-A one-to-one mapping from content IDs to the number of datasets in their NWB file, restricted to the files that are valid according to [`content-id-to-valid-nwb-file`](https://github.com/dandi-cache/content-id-to-valid-nwb-file).
+A mapping from the content ID of every valid NWB file on the DANDI archive to the total number of groups inside that file.
 
-The upstream cache maps each content ID to whether its NWB file is valid; this cache spans only the `true` entries. For each such content ID, the corresponding asset is streamed directly from the public DANDI Archive S3 bucket — the content ID is itself the S3 object identifier, so its URL is reconstructed without any API lookup — and its datasets are counted:
+The set of valid NWB files is taken from the [`content-id-to-valid-nwb-file`](https://github.com/dandi-cache/content-id-to-valid-nwb-file) cache, restricted to the entries it marked `true`. Each such file is streamed directly from the public DANDI S3 bucket and read with [h5py](https://www.h5py.org/) (HDF5 assets) or [zarr](https://zarr.readthedocs.io/) (Zarr assets), and its datasets are counted.
 
-- HDF5 NWB files (stored as a single blob) are streamed with [`remfile`](https://github.com/flatironinstitute/remfile) and opened with [`h5py`](https://github.com/h5py/h5py); the count is the number of HDF5 datasets.
-- Zarr NWB stores (`.nwb.zarr`) are read anonymously from S3 with [`s3fs`](https://github.com/fsspec/s3fs) and opened with [`zarr`](https://github.com/zarr-developers/zarr-python); the count is the number of Zarr arrays (the Zarr analogue of a dataset).
+Each line of the derivatives is a JSON object of the form:
 
-Because a content ID is content-addressed, each file's dataset count is immutable, so the cache is incremental: every run counts only content IDs it has not recorded yet, catching up over successive daily runs.
+```json
+{"<content_id>": <number_of_datasets>}
+```
 
 Updated frequently.
 
