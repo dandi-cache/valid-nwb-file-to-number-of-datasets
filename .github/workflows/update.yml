@@ -17,7 +17,7 @@ on:
         type: boolean
         default: false
       limit:
-        description: "Cap on the number of new content IDs counted in this run (ignored under testing)."
+        description: "Complete run only: cap on the number of newly valid content IDs to process."
         required: false
         type: number
         default: 500
@@ -91,7 +91,7 @@ jobs:
           # Empty for scheduled runs and "false" for plain manual runs (complete update);
           # only "true" when testing mode is explicitly selected on workflow_dispatch.
           TESTING: ${{ github.event.inputs.testing }}
-          # Empty for scheduled runs, so update_pipeline.sh applies its default batch size.
+          # Complete-run batch cap; the pipeline defaults it to 500 when unset (scheduled runs).
           LIMIT: ${{ github.event.inputs.limit }}
           GITHUB_SHA: ${{ github.sha }}
           IMAGE: ghcr.io/dandi-cache/valid-nwb-file-to-number-of-datasets:latest

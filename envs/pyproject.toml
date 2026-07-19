@@ -11,7 +11,6 @@ dependencies = [
     # cannot read (it rejects their consolidated metadata).
     "h5py",
     "remfile",
-    "requests",
     "s3fs",
     "zarr<3",
 ]

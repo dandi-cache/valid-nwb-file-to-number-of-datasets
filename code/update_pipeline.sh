@@ -27,9 +27,9 @@
 #   TESTING      Set to "true" to run update.py in testing mode: it processes only a few
 #                items and reads/writes derivatives/testing.jsonl, leaving the real cache
 #                untouched. Empty/unset means a complete run.
-#   LIMIT        Cap on the number of new content IDs counted in one run (default 500).
-#                Streaming each NWB file over the network is moderately heavy, so the backlog
-#                is caught up incrementally over successive runs. Ignored when TESTING=true.
+#   LIMIT        Batch size cap passed to update.py's `--limit` on a complete run. Streaming
+#                and walking each NWB file is heavy, so a single run advances at most this
+#                many newly valid content IDs (default: 500). Ignored in testing mode.
 #   GITHUB_SHA   Recorded in the provenance message to link results to the code commit.
 #   RUNNER_TEMP  Scratch directory for the working clones (default: /tmp).
 set -euo pipefail
@@ -41,13 +41,12 @@ TESTING="${TESTING:-}"
 LIMIT="${LIMIT:-500}"
 GITHUB_SHA="${GITHUB_SHA:-unknown}"
 
-# Only pass --testing when requested, so a normal run processes the full cache. A testing run
-# has its own fixed item cap, so the batch limit is not applied to it.
-TESTING_ARG=""
-LIMIT_ARG="--limit ${LIMIT}"
+# A testing run caps its own batch and writes derivatives/testing.jsonl; a complete run is
+# bounded by --limit instead, so the two flags are mutually exclusive here.
 if [ "${TESTING}" = "true" ]; then
-  TESTING_ARG="--testing"
-  LIMIT_ARG=""
+  RUN_ARG="--testing"
+else
+  RUN_ARG="--limit ${LIMIT}"
 fi
 
 BOT_NAME="github-actions[bot]"
@@ -167,7 +166,7 @@ datalad containers-run -n pipeline --explicit \
   "${RUN_INPUT_ARGS[@]}" \
   --output derivatives \
   -m "Update valid-nwb-file-to-number-of-datasets (code @ ${GITHUB_SHA}; image ${DIGEST})" \
-  "python /code/update.py --base-directory /tmp ${TESTING_ARG} ${LIMIT_ARG}"
+  "python /code/update.py --base-directory /tmp ${RUN_ARG}"
 
 # Publish the full results to the `derivatives` branch.
 git -C "${DS}" push "${REPO_URL}" HEAD:derivatives
