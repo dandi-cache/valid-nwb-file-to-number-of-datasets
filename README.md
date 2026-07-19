@@ -1,6 +1,6 @@
 # DANDI Cache: `valid-nwb-file-to-number-of-datasets`
 
-A mapping from the content ID of every valid NWB file on the DANDI archive to the total number of groups inside that file.
+A mapping from the content ID of every valid NWB file on the DANDI archive to the total number of datasets inside that file.
 
 The set of valid NWB files is taken from the [`content-id-to-valid-nwb-file`](https://github.com/dandi-cache/content-id-to-valid-nwb-file) cache, restricted to the entries it marked `true`. Each such file is streamed directly from the public DANDI S3 bucket and read with [h5py](https://www.h5py.org/) (HDF5 assets) or [zarr](https://zarr.readthedocs.io/) (Zarr assets), and its datasets are counted.
 
