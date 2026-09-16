@@ -1,16 +1,20 @@
+# This cache's own processing dependencies, in one place: the container installs them, and
+# `uv run --project envs` recreates the same set locally for debugging.
+#
+# There are none. Probing the layout of a content-addressed asset and walking it is what the `:nwb`
+# base image is for, and it carries the whole stack this cache used to list here: h5py, remfile,
+# s3fs and zarr.
+#
+# `datalad` and `datalad-container` used to be here too. They never ran inside the image; the
+# shared pipeline installs them on the runner from its own pinned requirements.
+
 [project]
 name = "valid-nwb-file-to-number-of-datasets"
 version = "0.1.0"
 requires-python = ">=3.13"
-dependencies = [
-    "datalad",
-    "datalad-container",
-    # Processing dependencies used by code/update.py. HDF5 NWB files are streamed with
-    # remfile + h5py; Zarr NWB stores are read anonymously from S3 with s3fs + zarr. zarr is
-    # pinned below 3 because DANDI's NWB stores are the Zarr v2 format, which zarr-python 3.x
-    # cannot read (it rejects their consolidated metadata).
-    "h5py",
-    "remfile",
-    "s3fs",
-    "zarr<3",
-]
+dependencies = []
+
+[project.optional-dependencies]
+# Only for running outside the container: inside it, the library comes from the base image, and
+# installing it again from git would silently replace the version that image was built with.
+local = ["dandi-cache-utils[nwb] @ git+https://github.com/dandi-cache/dandi-cache-utils.git"]
