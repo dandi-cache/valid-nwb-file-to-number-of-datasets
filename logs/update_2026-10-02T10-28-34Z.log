@@ -1,0 +1,4 @@
+2026-10-02T10:28:34Z INFO Logging to /tmp/logs/update_2026-10-02T10-28-34Z.log.
+2026-10-02T10:28:34Z INFO Update valid-nwb-file-to-number-of-datasets (base directory /tmp).
+2026-10-02T10:28:34Z INFO Processing 0 items (64336 already recorded).
+2026-10-02T10:28:34Z INFO Wrote 64336 records to /tmp/derivatives/valid_nwb_file_to_number_of_datasets.jsonl (0 new, 0 failed) in 0.0 min (peak memory 40 MiB).
