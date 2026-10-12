@@ -36,9 +36,6 @@ valid_nwb_file_to_number_of_datasets = {key: value for url in files for line in 
 
 Each line is a single-entry mapping of `{"<content_id>": <number_of_datasets>}`.
 
-An entry is not filed under its key: the chunks hold the entries in the order they were recorded, so looking up one means reading through them.
-To look up many, read it once as above, or clone the `derivatives` branch.
-
 ### Remote Zarr store
 
 Anything that opens Zarr can open the store over HTTP, reading only the chunks it needs.
