@@ -1,0 +1,5 @@
+2026-11-09T17:28:11Z INFO Logging to /tmp/logs/update_2026-11-09T17-28-11Z.log.
+2026-11-09T17:28:11Z INFO Update valid-nwb-file-to-number-of-datasets (base directory /tmp).
+2026-11-09T17:28:13Z INFO Processing 0 items (198536 already recorded).
+2026-11-09T17:28:14Z INFO Wrote 198536 records to /tmp/derivatives/valid_nwb_file_to_number_of_datasets.zarr (0 new, 0 failed) in 0.0 min (peak memory 201 MiB).
+2026-11-09T17:28:14Z INFO Progress: 198,485 of 198,485 candidates recorded (100.0%).
