@@ -1,0 +1,25 @@
+2026-11-26T15:06:56Z INFO Logging to /tmp/logs/update_2026-11-26T15-06-56Z.log.
+2026-11-26T15:06:56Z INFO Update valid-nwb-file-to-number-of-datasets (base directory /tmp).
+2026-11-26T15:06:57Z INFO Processing 19 items (221858 already recorded).
+2026-11-26T15:07:02Z INFO [1/19] 0dd2fc08-8e26-46da-a9bb-a392a3acdc6b: 378 datasets; 4.3 s; peak memory 208 MiB.
+2026-11-26T15:07:05Z INFO [2/19] 1705c525-99f6-40c3-b524-a5f610c4453c: 378 datasets; 3.3 s; peak memory 208 MiB.
+2026-11-26T15:07:09Z INFO [3/19] 17f87e3d-bedc-4134-9cf6-76caaec37e98: 378 datasets; 4.1 s; peak memory 208 MiB.
+2026-11-26T15:07:12Z INFO [4/19] 196a8786-aa24-4718-8256-072724e23897: 378 datasets; 3.1 s; peak memory 208 MiB.
+2026-11-26T15:07:15Z INFO [5/19] 26856d42-a308-4bda-9481-9f3a4eadf5dd: 378 datasets; 3.2 s; peak memory 208 MiB.
+2026-11-26T15:07:19Z INFO [6/19] 3e773fad-5ffa-4d20-92a5-d2dd89b45525: 378 datasets; 3.8 s; peak memory 208 MiB.
+2026-11-26T15:07:24Z INFO [7/19] 41d6f2cf-8714-4076-ad1b-7e2989d6b153: 378 datasets; 4.5 s; peak memory 208 MiB.
+2026-11-26T15:07:27Z INFO [8/19] 46b2b239-d04c-4b77-9ff3-def9ae3a0341: 378 datasets; 3.8 s; peak memory 208 MiB.
+2026-11-26T15:07:31Z INFO [9/19] 4a25d0c0-4034-4415-9b64-58d51447488b: 378 datasets; 3.4 s; peak memory 208 MiB.
+2026-11-26T15:07:33Z INFO [10/19] 4fabcd26-e257-4159-a26c-a4f56fb63e51: 378 datasets; 2.5 s; peak memory 208 MiB.
+2026-11-26T15:07:36Z INFO [11/19] 70600e9b-2fce-4d23-ba3e-3ae4f1a6614f: 378 datasets; 3.0 s; peak memory 208 MiB.
+2026-11-26T15:07:40Z INFO [12/19] 7885b840-d478-42a7-ad6a-c8afb24e24f9: 378 datasets; 3.9 s; peak memory 208 MiB.
+2026-11-26T15:07:44Z INFO [13/19] 7c14b2b4-cae8-43c9-94e0-d283412ac00a: 378 datasets; 3.9 s; peak memory 208 MiB.
+2026-11-26T15:07:48Z INFO [14/19] 7e78d447-a3f6-4984-950f-e2a0374892c9: 378 datasets; 3.6 s; peak memory 208 MiB.
+2026-11-26T15:07:51Z INFO [15/19] 946599f5-5673-4398-a952-ccad08686030: 378 datasets; 3.6 s; peak memory 208 MiB.
+2026-11-26T15:07:54Z INFO [16/19] 991e75ef-1f2f-485c-9ce5-7bc2ad8d2262: 378 datasets; 2.3 s; peak memory 208 MiB.
+2026-11-26T15:07:59Z INFO [17/19] e5597223-7705-460a-ae08-c6baf75f6e90: 378 datasets; 4.8 s; peak memory 208 MiB.
+2026-11-26T15:08:01Z INFO [18/19] f4171596-4a13-4e93-ba49-a40910e324ce: 378 datasets; 2.5 s; peak memory 208 MiB.
+2026-11-26T15:08:05Z INFO [19/19] f95d8800-d3ee-4aa5-a9fd-633184c88c5d: 378 datasets; 3.5 s; peak memory 208 MiB.
+2026-11-26T15:08:05Z INFO Wrote 221877 records to /tmp/derivatives/valid_nwb_file_to_number_of_datasets.zarr (19 new, 0 failed) in 1.1 min (peak memory 291 MiB).
+2026-11-26T15:08:05Z INFO Batch summary: considered=19 new=19 failed=0 left=0 stopped=none
+2026-11-26T15:08:05Z INFO Progress: 221,817 of 221,817 candidates recorded (100.0%).
